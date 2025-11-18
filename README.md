@@ -1,73 +1,104 @@
-ManCare - O Manual Moderno da Saúde Masculina
+# **ManCare – O Manual Moderno da Saúde Masculina**
 
-Uma aplicação web focada na saúde e bem-estar do homem, oferecendo artigos informativos, ferramentas de saúde interativas e uma comunidade de apoio.
+Aplicação web voltada para a saúde e bem-estar do homem, oferecendo artigos informativos, ferramentas interativas e um espaço comunitário para partilha de experiências.
 
+---
 
-📋 Funcionalidades
+## 📋 **Funcionalidades**
 
-Artigos Informativos: Conteúdo sobre saúde mental, fitness, nutrição e prevenção.
+### **📚 Artigos Informativos**
 
-Ferramentas Interativas:
+Conteúdos sobre:
 
-Calculadora de IMC (Índice de Massa Corporal).
+* Saúde mental
+* Fitness
+* Nutrição
+* Prevenção de doenças
 
-Quiz de Bem-Estar com pontuação e recomendações.
+### **🧮 Ferramentas Interativas**
 
-Comunidade (Fórum):
+* **Calculadora de IMC (Índice de Massa Corporal)**
+* **Quiz de Bem-Estar** com pontuação e recomendações personalizadas
 
-Sistema de Autenticação Completo (Login e Registo) via Firebase.
+### **💬 Comunidade (Fórum)**
 
-Criação de novos tópicos.
+* Sistema de autenticação completo (Login e Registo) via **Firebase Authentication**
+* Criação e visualização de tópicos
+* Sistema de respostas
+* Avatares automáticos gerados a partir do nome do utilizador (UI Avatars API)
 
-Visualização de tópicos e sistema de respostas.
+### **💻 Design Responsivo**
 
-Avatares automáticos baseados no nome do utilizador.
+Interface moderna (**ManCare Theme**) totalmente adaptada para desktop e mobile.
 
-Design Responsivo: Interface moderna ("ManCare Theme") adaptada para desktop e mobile.
+---
 
-🛠️ Tecnologias Utilizadas
+## 🛠️ **Tecnologias Utilizadas**
 
-Frontend: HTML5, CSS3 (Flexbox/Grid), JavaScript (ES6+).
+### **Frontend**
 
-Backend (BaaS): Google Firebase.
+* HTML5
+* CSS3 (Flexbox & Grid)
+* JavaScript (ES6+)
 
-Firebase Authentication: Gestão de utilizadores.
+### **Backend (BaaS)**
 
-Cloud Firestore: Base de dados NoSQL em tempo real.
+* **Google Firebase**
 
-Fontes: Google Fonts (Poppins e Lato).
+  * *Firebase Authentication* — gestão de utilizadores
+  * *Cloud Firestore* — base de dados NoSQL em tempo real
 
-Ícones/Avatares: UI Avatars API.
+### **Outros Recursos**
 
-🚀 Como Executar o Projeto
+* Google Fonts (Poppins e Lato)
+* UI Avatars API
 
-Clone este repositório:
+---
 
-git clone https://github.com/MaduSantoss/ManCare.git
+## 🚀 **Como Executar o Projeto**
 
+1. Clone este repositório:
 
-Abra a pasta do projeto no VS Code.
+   ```bash
+   git clone https://github.com/MaduSantoss/ManCare.git
+   ```
 
-Utilize a extensão Live Server para abrir o ficheiro templates/index.html.
+2. Abra a pasta do projeto no **VS Code**.
 
-Nota: Devido às políticas de segurança do Firebase, o Login/Registo pode não funcionar se abrir o ficheiro diretamente pelo explorador de ficheiros (file://). Use sempre um servidor local.
+3. Inicie o projeto utilizando a extensão **Live Server** abrindo o ficheiro:
+   `templates/index.html`
 
-⚙️ Configuração
+> **Importante:** Devido às políticas de segurança do Firebase, o Login/Registo pode não funcionar se o ficheiro for aberto diretamente pelo navegador via `file://`. Utilize sempre um servidor local.
 
-O projeto já contém as chaves de API públicas necessárias para o funcionamento do Firebase (Modo de Teste).
+---
 
-📄 Estrutura de Pastas
+## ⚙️ **Configuração**
 
+O projeto já inclui as chaves públicas necessárias para funcionamento do Firebase no modo de teste.
+
+---
+
+## 📁 **Estrutura de Pastas**
+
+```
 /
 ├── assets/          # Imagens e ícones
 ├── templates/       # Ficheiros HTML (index, login, forum, etc.)
 ├── style.css        # Estilos globais
-├── script.js        # Lógica da aplicação e integração Firebase
+├── script.js        # Lógica da aplicação e integração com Firebase
 └── README.md        # Documentação
+```
+
+---
+
+## 🤝 **Contribuição**
+
+Sinta-se à vontade para fazer um **fork** do projeto e enviar **pull requests** com melhorias.
+
+---
+
+Desenvolvido com foco na saúde masculina. 💙
+
+---
 
 
-🤝 Contribuição
-
-Sinta-se à vontade para fazer um fork do projeto e enviar pull requests.
-
-Desenvolvido com foco na saúde masculina.
