@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Novo Tópico | ManCare</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Man<span class="logo-destaque">Care</span></a>
+            <nav>
+                <ul id="navbar-menu">
+                    <li><a href="index.html#pilares">Pilares da Saúde</a></li>
+                    <li><a href="ferramentas.html">Ferramentas</a></li>
+                    <li><a href="forum.html">Comunidade</a></li>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
+                </ul>
+                <button id="mobile-menu-toggle">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        <nav class="breadcrumb topic-breadcrumb">
+            <a href="index.html">Home</a> &gt; 
+            <a href="forum.html">Comunidade</a> &gt; 
+            <span>Criar Novo Tópico</span>
+        </nav>
+        <div class="form-container-card">
+            <header class="form-header">
+                <h2>Inicie uma Nova Conversa</h2>
+                <p>Compartilhe sua dúvida ou experiência com a comunidade.</p>
+            </header>
+            <form class="topic-form">
+                <div class="form-group">
+                    <label for="topic-title">Título do Tópico</label>
+                    <input type="text" id="topic-title" name="topic-title" placeholder="Seja claro e direto. Ex: Dúvida sobre treino ABC" required>
+                </div>
+                <div class="form-group">
+                    <label for="topic-category">Categoria</label>
+                    <select id="topic-category" name="topic-category" required>
+                        <option value="" disabled selected>Selecione uma categoria...</option>
+                        <option value="fitness">Fitness</option>
+                        <option value="mental">Saúde Mental</option>
+                        <option value="nutricao">Nutrição</option>
+                        <option value="prevencao">Prevenção e Check-ups</option>
+                        <option value="geral">Geral</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="topic-message">Sua Mensagem</label>
+                    <textarea id="topic-message" name="topic-message" rows="12" placeholder="Descreva sua dúvida ou compartilhe sua história..." required></textarea>
+                </div>
+                <div class="form-actions">
+                    <a href="forum.html" class="button-cancel">Cancelar</a>
+                    <button type="submit" class="cta-button">Publicar Tópico</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ManCare. Todos os direitos reservados.</p>
+            <p>Este site oferece informação e não substitui a consulta médica.</p>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore-compat.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>

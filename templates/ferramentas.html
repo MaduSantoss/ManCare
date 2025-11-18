@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramentas de Saúde | ManCare</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Man<span class="logo-destaque">Care</span></a>
+            <nav>
+                <ul id="navbar-menu">
+                    <li><a href="index.html#pilares">Pilares da Saúde</a></li>
+                    <li><a href="ferramentas.html">Ferramentas</a></li>
+                    <li><a href="forum.html">Comunidade</a></li>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
+                </ul>
+                <button id="mobile-menu-toggle">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        <header class="page-header">
+            <h1>Ferramentas de Saúde</h1>
+            <p>Use nossa calculadora para entender melhor seus indicadores de saúde.</p>
+        </header>
+        <section class="tool-section">
+            <h2>Calculadora de IMC (Índice de Massa Corporal)</h2>
+            <div class="calculator-card">
+                <div class="form-group">
+                    <label for="altura">Sua Altura (em cm)</label>
+                    <input type="number" id="altura" placeholder="Ex: 180">
+                </div>
+                <div class="form-group">
+                    <label for="peso">Seu Peso (em kg)</label>
+                    <input type="number" id="peso" placeholder="Ex: 85">
+                </div>
+                <button class="cta-button" id="calcular-btn">Calcular</button>
+                <div id="resultado-imc" class="resultado-box"></div>
+            </div>
+        </section>
+        <section id="quiz-saude" class="tool-section">
+            <h2>Quiz Rápido de Bem-Estar</h2>
+            <div id="quiz-container" class="calculator-card">
+                <div id="quiz-intro">
+                    <p>Responda 5 perguntas rápidas e veja seu "score" de bem-estar e o que fazer para melhorá-lo.</p>
+                    <button class="cta-button" id="start-quiz-btn">Começar Quiz</button>
+                </div>
+                <div id="quiz-main" style="display: none;">
+                    <h3 id="quiz-question-text"></h3>
+                    <div id="quiz-answer-buttons"></div>
+                </div>
+                <div id="quiz-result" style="display: none;">
+                    <h3>Seu Resultado:</h3>
+                    <div id="quiz-result-content" class="resultado-box"></div>
+                    <button class="cta-button" id="restart-quiz-btn">Refazer Quiz</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ManCare. Todos os direitos reservados.</p>
+            <p>Este site oferece informação e não substitui a consulta médica.</p>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore-compat.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>

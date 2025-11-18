@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tópico | Comunidade | ManCare</title>
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Man<span class="logo-destaque">Care</span></a>
+            <nav>
+                <ul id="navbar-menu">
+                    <li><a href="index.html#pilares">Pilares da Saúde</a></li>
+                    <li><a href="ferramentas.html">Ferramentas</a></li>
+                    <li><a href="forum.html">Comunidade</a></li>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
+                </ul>
+                <button id="mobile-menu-toggle">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <nav class="breadcrumb topic-breadcrumb">
+            <a href="index.html">Home</a> &gt; 
+            <a href="forum.html">Comunidade</a> &gt; 
+            <span>A carregar tópico...</span>
+        </nav>
+
+        <header class="topic-header" id="topic-header-dynamic">
+            <h1>A carregar...</h1>
+        </header>
+
+        <div class="posts-list">
+            
+            <article class="post-card original-post" id="original-post-dynamic">
+                <!-- O script vai preencher este post -->
+            </article>
+
+            <h3 class="replies-header" id="replies-header">Respostas</h3>
+
+            <div id="replies-container">
+                <!-- O script vai preencher as respostas aqui -->
+            </div>
+
+            <article class="post-card reply-form-card">
+                <aside class="post-author-info">
+                    <img src="https://ui-avatars.com/api/?name=Eu&background=random" alt="Seu Avatar" class="author-avatar">
+                </aside>
+                <div class="post-content">
+                    <h4>Deixe sua resposta</h4>
+                    <form class="reply-form" id="reply-form">
+                        <textarea id="reply-message" placeholder="Escreva sua resposta aqui..."></textarea>
+                        <button type="submit" class="cta-button">Publicar Resposta</button>
+                    </form>
+                </div>
+            </article>
+
+        </div> 
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ManCare. Todos os direitos reservados.</p>
+            <p>Este site oferece informação e não substitui a consulta médica.</p>
+        </div>
+    </footer>
+    
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore-compat.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>

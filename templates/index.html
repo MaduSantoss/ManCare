@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManCare | O Manual Moderno da Saúde Masculina</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Man<span class="logo-destaque">Care</span></a>
+            <nav>               
+                <ul id="navbar-menu">
+                    <li><a href="index.html#pilares">Pilares da Saúde</a></li>
+                    <li><a href="ferramentas.html">Ferramentas</a></li>
+                    <li><a href="forum.html">Comunidade</a></li>
+                    <li><a href="sobre.html">Sobre Nós</a></li>                   
+                </ul>               
+                <button id="mobile-menu-toggle">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-slideshow">
+            <div class="slide active" style="background-image: url('../assets/img/homem-atividade-fisica-scroll.png');"></div>
+            <div class="slide" style="background-image: url('../assets/img/prato-saudavel-scroll.jpg');"></div>
+            <div class="slide" style="background-image: url('../assets/img/homem-meditando-scroll.png');"></div>
+        </div>
+        <div class="container hero-content">
+            <h1>Sua Saúde, Levada a Sério.</h1>
+            <p>O guia completo para o bem-estar masculino. Sem julgamentos, direto ao ponto.</p>
+            <a href="ferramentas.html#quiz-saude" class="cta-button">Comece seu Quiz de Saúde</a>
+        </div>
+    </section>
+    <main class="container">
+        <section id="pilares" class="pilares-saude">
+            <h2>Nossos Pilares</h2>
+            <div class="pilares-grid">
+                <div class="pilar-card">
+                    <img src="../assets/icons/saude-mental.svg" alt="Ícone Saúde Mental" class="pilar-icon">
+                    <h3>Saúde Mental</h3>
+                    <p>Estresse, ansiedade e como lidar com a pressão diária.</p>
+                </div>
+                <div class="pilar-card">
+                    <img src="../assets/icons/fitness-bike.svg" alt="Ícone Fitness" class="pilar-icon">
+                    <h3>Fitness</h3>
+                    <p>Treinos, recuperação e movimento para todas as idades.</p>
+                </div>
+                <div class="pilar-card">
+                    <img src="../assets/icons/nutricao-icon.svg" alt="Ícone Nutrição" class="pilar-icon">
+                    <h3>Nutrição</h3>
+                    <p>Receitas rápidas, suplementos e alimentação inteligente.</p>
+                </div>
+                <div class="pilar-card">
+                    <img src="../assets/icons/prevencao-icon.svg" alt="Ícone Prevenção" class="pilar-icon">
+                    <h3>Prevenção</h3>
+                    <p>Check-ups, saúde sexual e os exames que importam.</p>
+                </div>
+            </div>
+        </section>
+        <section id="artigos-destaque" class="artigos">
+            <h2>Artigos em Destaque</h2>
+            <div class="artigos-grid">
+                <article class="artigo-card">
+                    <img src="../assets/img/homem-correndo-artigo.png" alt="Homem correndo" class="artigo-imagem">
+                    <div class="artigo-conteudo">
+                        <span class="tag">Fitness</span>
+                        <h3>Como começar a correr do zero (sem se machucar)</h3>
+                        <a href="artigo-correr.html">Ler mais</a>
+                    </div>
+                </article>
+                <article class="artigo-card">
+                    <img src="../assets/img/homem-meditando-artigo.png" alt="Homem meditando" class="artigo-imagem">
+                    <div class="artigo-conteudo">
+                        <span class="tag">Saúde Mental</span>
+                        <h3>5 Sinais de Burnout que você não pode ignorar</h3>
+                        <a href="artigo-burnout.html">Ler mais</a>
+                    </div>
+                </article>
+                <article class="artigo-card">
+                    <img src="../assets/img/prato-saudavek-artigo.png" alt="Prato de comida saudável" class="artigo-imagem">
+                    <div class="artigo-conteudo">
+                        <span class="tag">Nutrição</span>
+                        <h3>Proteína: O guia definitivo para ganhar massa</h3>
+                        <a href="artigo-proteina.html">Ler mais</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ManCare. Todos os direitos reservados.</p>
+            <p>Este site oferece informação e não substitui a consulta médica.</p>
+        </div>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore-compat.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>
