@@ -1,104 +1,91 @@
-# **ManCare – O Manual Moderno da Saúde Masculina**
+# **ManCare – Saúde do Homem (MVP)**
 
-Aplicação web voltada para a saúde e bem-estar do homem, oferecendo artigos informativos, ferramentas interativas e um espaço comunitário para partilha de experiências.
+O **ManCare** é uma plataforma web desenvolvida para o ** MVP Saúde do Homem da UNINASSAU Aracaju**. O projeto tem como objetivo promover o bem-estar masculino por meio de informação acessível, ferramentas de autoavaliação e uma comunidade de apoio segura.
 
 ---
 
-## 📋 **Funcionalidades**
+## 🎯 **Objetivo do Projeto**
 
-### **📚 Artigos Informativos**
+Criar uma solução tecnológica que incentive os homens a cuidarem da saúde física e mental, quebrando tabus e facilitando o acesso à informação preventiva.
+O projeto está alinhado aos **ODS 3 (Saúde e Bem-Estar)** e **ODS 5 (Igualdade de Gênero)** da ONU.
 
-Conteúdos sobre:
+---
 
-* Saúde mental
-* Fitness
-* Nutrição
-* Prevenção de doenças
+## ✨ **Funcionalidades Principais**
 
-### **🧮 Ferramentas Interativas**
+### **Portal de Conteúdo**
+
+* Artigos informativos sobre **Fitness**, **Nutrição** e **Saúde Mental**.
+
+### **Ferramentas Interativas**
 
 * **Calculadora de IMC (Índice de Massa Corporal)**
-* **Quiz de Bem-Estar** com pontuação e recomendações personalizadas
+* **Quiz de Bem-Estar** com feedback imediato
 
-### **💬 Comunidade (Fórum)**
+### **Comunidade (Fórum)**
 
-* Sistema de autenticação completo (Login e Registo) via **Firebase Authentication**
-* Criação e visualização de tópicos
-* Sistema de respostas
-* Avatares automáticos gerados a partir do nome do utilizador (UI Avatars API)
+* Sistema de criação de contas e login
+* Publicação de tópicos e dúvidas
+* Sistema de respostas e interação
+* Avatares gerados automaticamente (UI Avatars)
 
-### **💻 Design Responsivo**
+### **Design Responsivo**
 
-Interface moderna (**ManCare Theme**) totalmente adaptada para desktop e mobile.
+* Interface moderna adaptada para desktop e dispositivos móveis.
 
 ---
 
 ## 🛠️ **Tecnologias Utilizadas**
 
-### **Frontend**
+* **Frontend:** HTML5, CSS3 (Flexbox/Grid), JavaScript ES6+
+* **Armazenamento:** LocalStorage e SessionStorage
+* **Estilização:** CSS puro (sem frameworks como Bootstrap)
+* **Ícones e Avatares:** Google Fonts, UI Avatars
 
-* HTML5
-* CSS3 (Flexbox & Grid)
-* JavaScript (ES6+)
-
-### **Backend (BaaS)**
-
-* **Google Firebase**
-
-  * *Firebase Authentication* — gestão de utilizadores
-  * *Cloud Firestore* — base de dados NoSQL em tempo real
-
-### **Outros Recursos**
-
-* Google Fonts (Poppins e Lato)
-* UI Avatars API
+**Técnica:**
+Todo o sistema de autenticação e armazenamento foi **simulado localmente** no navegador.
 
 ---
 
 ## 🚀 **Como Executar o Projeto**
 
-1. Clone este repositório:
+### **Opção 1: Acesso Online (Recomendado)**
+
+Acesse a versão mais recente em:
+🔗 [https://man-care.vercel.app/templates/index.html]
+
+### **Opção 2: Executar Localmente**
+
+1. Clone o repositório:
 
    ```bash
    git clone https://github.com/MaduSantoss/ManCare.git
    ```
-
-2. Abra a pasta do projeto no **VS Code**.
-
-3. Inicie o projeto utilizando a extensão **Live Server** abrindo o ficheiro:
-   `templates/index.html`
-
-> **Importante:** Devido às políticas de segurança do Firebase, o Login/Registo pode não funcionar se o ficheiro for aberto diretamente pelo navegador via `file://`. Utilize sempre um servidor local.
+2. Abra a pasta do projeto no VS Code.
+3. Utilize a extensão **Live Server** para abrir o arquivo `templates/index.html` ou o arquivo de redirecionamento na raiz.
 
 ---
 
-## ⚙️ **Configuração**
+## 📱 **Detalhes da Implementação**
 
-O projeto já inclui as chaves públicas necessárias para funcionamento do Firebase no modo de teste.
+O sistema simula um ambiente *full-stack* utilizando apenas JavaScript no cliente:
 
----
+### 🔐 **Registo/Login**
 
-## 📁 **Estrutura de Pastas**
+* Credenciais salvas no LocalStorage
+* Validação baseada em um objeto JSON armazenado localmente
 
-```
-/
-├── assets/          # Imagens e ícones
-├── templates/       # Ficheiros HTML (index, login, forum, etc.)
-├── style.css        # Estilos globais
-├── script.js        # Lógica da aplicação e integração com Firebase
-└── README.md        # Documentação
-```
+### 📌 **Persistência**
 
----
+* Tópicos e comentários do fórum permanecem armazenados mesmo após recarregar a página
 
-## 🤝 **Contribuição**
+### 🔒 **Segurança**
 
-Sinta-se à vontade para fazer um **fork** do projeto e enviar **pull requests** com melhorias.
+* Páginas restritas (ex.: Criar Tópico) só podem ser acessadas com sessão ativa
 
 ---
 
-Desenvolvido com foco na saúde masculina. 💙
+## 👥 **Apresentação**
+Projeto desenvolvido e apresentado no **MVP Saúde do Homem 2025**.
 
 ---
-
-
