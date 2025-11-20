@@ -1,4 +1,4 @@
-//local storage
+// --- BANCO DE DADOS SIMULADO (LOCALSTORAGE) ---
 const DB = {
     // Ler dados
     getUsers: () => JSON.parse(localStorage.getItem('mancare_users') || '[]'),
@@ -27,7 +27,7 @@ const DB = {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    //MENU MÓVEL
+    // MENU MÓVEL
     const menuToggle = document.getElementById('mobile-menu-toggle');
     const navbarMenu = document.getElementById('navbar-menu');
     const navbar = document.querySelector('.navbar nav');
@@ -39,19 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    //SESSÃO
+    // NAVBAR
     const navbarUl = document.getElementById('navbar-menu');
     const currentUser = DB.getCurrentUser();
 
     if (navbarUl) {
+        const oldLoginLinks = navbarUl.querySelectorAll('a[href="login.html"]');
+        oldLoginLinks.forEach(link => {
+            if (link.parentElement.tagName === 'LI') link.parentElement.remove();
+        });
         
-        const oldLogin = document.getElementById('login-link-nav');
         const oldLogout = document.getElementById('logout-btn');
-        if(oldLogin && oldLogin.parentElement) oldLogin.parentElement.remove();
         if(oldLogout && oldLogout.parentElement) oldLogout.parentElement.remove();
 
         if (currentUser) {
-            const userLi = document.createElement('li'); 
+            const userLi = document.createElement('li');
             const nomeUsuario = currentUser.email.split('@')[0];
             userLi.innerHTML = `<span style="font-weight:700; color:#1a253c; font-size:14px;">Olá, ${nomeUsuario}</span>`;
             userLi.style.alignSelf = "center";
@@ -76,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // CADASTRO 
+    //REGISTER
     const registerForm = document.getElementById('register-form');
     const authErrorDiv = document.getElementById('auth-error');
 
@@ -108,13 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const newUser = { id: 'usr_' + Date.now(), email, password };
             DB.saveUser(newUser);
-            DB.loginUser(newUser); 
+            DB.loginUser(newUser);
             alert("Conta criada com sucesso!");
             window.location.href = 'forum.html';
         });
     }
 
-    // LOGIN
+    //LOGIN
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -133,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // FÓRUM
+    // FÓRUM - LISTAR TÓPICOS
     const topicListContainer = document.getElementById('forum-topic-list');
     if (topicListContainer) {
         const topics = DB.getTopics();
@@ -152,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tr.innerHTML = `
                     <td>
                         <a href="ver-topico.html?id=${topic.id}" class="topic-title">${topic.titulo}</a>
-                        <div class="topic-meta">por <span class="author-name">${topic.autor}</span> | ${date}</div>
+                        <div class="topic-meta">por <span class="author-name">${topic.autorEmail}</span> | ${date}</div>
                     </td>
                     <td><span class="tag-category tag-${topic.categoria}">${topic.categoria}</span></td>
                     <td>${respostasCount}</td>
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // FÓRUM-CRIAR TÓPICO
+    // FÓRUM: CRIAR TÓPICO
     const topicForm = document.querySelector('.topic-form');
     if (topicForm && !loginForm && !registerForm) {
         topicForm.addEventListener('submit', (e) => {
@@ -179,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 titulo: document.getElementById('topic-title').value,
                 categoria: document.getElementById('topic-category').value,
                 mensagem: document.getElementById('topic-message').value,
-                autor: currentUser.email,
+                autorEmail: currentUser.email,
                 data: new Date().toISOString(),
                 respostas: []
             };
@@ -190,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    //FÓRUM-VER TÓPICO E RESPONDER
+    // FÓRUM: VER TÓPICO E RESPONDER
     const topicHeader = document.getElementById('topic-header-dynamic');
     if (topicHeader) {
         const params = new URLSearchParams(window.location.search);
@@ -200,21 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (topic) {
             const date = new Date(topic.data).toLocaleDateString('pt-BR');
-            // Renderiza Cabeçalho
             topicHeader.innerHTML = `
                 <h1>${topic.titulo}</h1>
                 <div class="topic-details">
                     <span class="tag-category tag-${topic.categoria}">${topic.categoria}</span>
-                    <span>Postado por <span class="author-name">${topic.autor}</span> | ${date}</span>
+                    <span>Postado por <span class="author-name">${topic.autorEmail}</span> | ${date}</span>
                 </div>
             `;
             
-            // Avatar
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(topic.autor)}&background=random&color=fff`;
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(topic.autorEmail)}&background=random&color=fff`;
             document.getElementById('original-post-dynamic').innerHTML = `
                 <aside class="post-author-info">
                     <img src="${avatarUrl}" alt="Avatar" class="author-avatar">
-                    <span class="author-name">${topic.autor}</span>
+                    <span class="author-name">${topic.autorEmail}</span>
                     <span class="author-role">Autor</span>
                 </aside>
                 <div class="post-content">
@@ -223,23 +223,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // Respostas
             const renderReplies = () => {
                 const container = document.getElementById('replies-container');
                 container.innerHTML = "";
-                
                 const count = topic.respostas ? topic.respostas.length : 0;
                 document.getElementById('replies-header').innerText = `${count} Respostas`;
 
                 if(topic.respostas) {
                     topic.respostas.forEach(resp => {
-                        const avt = `https://ui-avatars.com/api/?name=${encodeURIComponent(resp.autor)}&background=random&color=fff`;
+                        const avt = `https://ui-avatars.com/api/?name=${encodeURIComponent(resp.autorEmail)}&background=random&color=fff`;
                         const card = document.createElement('article');
                         card.className = 'post-card';
                         card.innerHTML = `
                             <aside class="post-author-info">
                                 <img src="${avt}" alt="Avatar" class="author-avatar">
-                                <span class="author-name">${resp.autor}</span>
+                                <span class="author-name">${resp.autorEmail}</span>
                                 <span class="author-role">Membro</span>
                             </aside>
                             <div class="post-content">
@@ -253,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             renderReplies();
 
-            // Nova Resposta
             const replyForm = document.getElementById('reply-form');
             if(replyForm) {
                 replyForm.addEventListener('submit', (e) => {
@@ -268,14 +265,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const newReply = {
                         mensagem: msg,
-                        autor: currentUser.email,
+                        autorEmail: currentUser.email,
                         data: new Date().toISOString()
                     };
 
                     if(!topic.respostas) topic.respostas = [];
                     topic.respostas.push(newReply);
 
-                    // Atualiza no "Banco"
                     const topicIndex = topics.findIndex(t => t.id === id);
                     topics[topicIndex] = topic;
                     DB.updateTopics(topics);
@@ -284,13 +280,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     renderReplies();
                 });
             }
-
         } else {
             topicHeader.innerHTML = "<h1>Tópico não encontrado.</h1>";
         }
     }
 
-    //FERRAMENTAS E SLIDER
+    // CALCULADORA IMC
     const calcularBtn = document.getElementById('calcular-btn');
     if (calcularBtn) {
         calcularBtn.addEventListener('click', () => {
@@ -312,22 +307,136 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // QUIZ DE SAÚDE
     const startQuizBtn = document.getElementById('start-quiz-btn');
-    const quizMain = document.getElementById('quiz-main');
+    const restartQuizBtn = document.getElementById('restart-quiz-btn');
     const quizIntro = document.getElementById('quiz-intro');
+    const quizMain = document.getElementById('quiz-main');
     const quizResult = document.getElementById('quiz-result');
-    
-    if(startQuizBtn) {
-        startQuizBtn.addEventListener('click', () => {
-             quizIntro.style.display = 'none';
-             if(quizResult) {
-                 quizResult.style.display = 'block';
-                 document.getElementById('quiz-result-content').innerHTML = "<strong>Parabéns!</strong> Você deu o primeiro passo ao buscar informação. Continue explorando os artigos.";
-                 document.getElementById('quiz-result-content').className = 'resultado-box success';
-             }
+    const quizQuestionText = document.getElementById('quiz-question-text');
+    const quizAnswerButtons = document.getElementById('quiz-answer-buttons');
+    const quizResultContent = document.getElementById('quiz-result-content');
+
+    // PERGUNTAS DO QUIZ
+    const quizPerguntas = [
+        {
+            pergunta: "Quantas noites por semana você dorme 7-8 horas?",
+            respostas: [
+                { texto: "Quase todas (5-7)", pontos: 3 },
+                { texto: "Algumas (3-4)", pontos: 2 },
+                { texto: "Raramente (0-2)", pontos: 1 }
+            ]
+        },
+        {
+            pergunta: "Com que frequência você pratica exercícios (mín. 30 min)?",
+            respostas: [
+                { texto: "4+ vezes por semana", pontos: 3 },
+                { texto: "1-3 vezes por semana", pontos: 2 },
+                { texto: "Quase nunca", pontos: 1 }
+            ]
+        },
+        {
+            pergunta: "Como é sua alimentação diária?",
+            respostas: [
+                { texto: "Equilibrada (frutas, vegetais, proteínas)", pontos: 3 },
+                { texto: "Razoável (às vezes como bem, às vezes não)", pontos: 2 },
+                { texto: "Muitos processados, fast-food e açúcar", pontos: 1 }
+            ]
+        },
+        {
+            pergunta: "Como você lida com o estresse?",
+            respostas: [
+                { texto: "Tenho hobbies e consigo relaxar", pontos: 3 },
+                { texto: "Fico estressado, mas aguento", pontos: 2 },
+                { texto: "Me sinto sobrecarregado e ansioso", pontos: 1 }
+            ]
+        },
+        {
+            pergunta: "Você se sente conectado com amigos ou família?",
+            respostas: [
+                { texto: "Sim, converso e me encontro regularmente", pontos: 3 },
+                { texto: "Mais ou menos, falo pouco com as pessoas", pontos: 2 },
+                { texto: "Me sinto bastante isolado", pontos: 1 }
+            ]
+        }
+    ];
+
+    let perguntaAtualIndex = 0;
+    let pontuacaoTotal = 0;
+
+    function iniciarQuiz() {
+        perguntaAtualIndex = 0;
+        pontuacaoTotal = 0;
+        
+        if(quizIntro) quizIntro.style.display = 'none';
+        if(quizResult) quizResult.style.display = 'none';
+        if(quizMain) quizMain.style.display = 'block';
+        
+        mostrarPergunta();
+    }
+
+    function mostrarPergunta() {
+        if(quizAnswerButtons) quizAnswerButtons.innerHTML = ''; 
+        
+        let pergunta = quizPerguntas[perguntaAtualIndex];
+        if(quizQuestionText) quizQuestionText.innerText = pergunta.pergunta;
+
+        pergunta.respostas.forEach(resposta => {
+            const button = document.createElement('button');
+            button.innerText = resposta.texto;
+            button.addEventListener('click', () => selecionarResposta(resposta.pontos));
+            if(quizAnswerButtons) quizAnswerButtons.appendChild(button);
         });
     }
 
+    function selecionarResposta(pontos) {
+        pontuacaoTotal += pontos;
+        perguntaAtualIndex++;
+
+        if (perguntaAtualIndex < quizPerguntas.length) {
+            mostrarPergunta();
+        } else {
+            mostrarResultado();
+        }
+    }
+
+    function mostrarResultado() {
+        if(quizMain) quizMain.style.display = 'none';
+        if(quizResult) quizResult.style.display = 'block';
+
+        let mensagem = '';
+        let classeCss = '';
+
+        if (pontuacaoTotal >= 12) {
+            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Ótimo!)</strong><br>
+                        Você está no caminho certo! Seus hábitos de sono, dieta e exercícios parecem sólidos.`;
+            classeCss = 'success';
+        } else if (pontuacaoTotal >= 8) {
+            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Bom, mas atenção)</strong><br>
+                        Você tem uma base boa, mas alguns pontos precisam de ajuste. Confira nossos guias em 'Nutrição'.`;
+            classeCss = 'warning';
+        } else {
+            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Hora de Mudar)</strong><br>
+                        Parece que você está sobrecarregado. Não se preocupe, comece pelo nosso pilar de 'Saúde Mental'.`;
+            classeCss = 'danger';
+        }
+
+        if(quizResultContent) {
+            quizResultContent.innerHTML = mensagem;
+            quizResultContent.className = 'resultado-box';
+            quizResultContent.classList.add(classeCss);
+            quizResultContent.style.display = 'block';
+        }
+    }
+
+    if (startQuizBtn) {
+        startQuizBtn.addEventListener('click', iniciarQuiz);
+    }
+    if (restartQuizBtn) {
+        restartQuizBtn.addEventListener('click', iniciarQuiz);
+    }
+
+    // SLIDESHOW
     const slides = document.querySelectorAll('.hero-slideshow .slide');
     if (slides.length > 0) {
         let currentSlide = 0;
