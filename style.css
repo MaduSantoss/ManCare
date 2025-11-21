@@ -57,20 +57,19 @@ a {
     color: var(--accent-color);
 }
 
-/* - Cabeçalho / Navbar - */
+
+/* Navbar */
 .navbar {
     background-color: var(--bg-light-secondary);
     padding: 20px 0;
     border-bottom: 1px solid var(--border-light);
     box-shadow: 0 2px 5px rgba(0,0,0,0.04);
 }
-
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
 .logo {
     font-size: 24px;
     font-weight: 700;
@@ -81,35 +80,45 @@ a {
 .logo-destaque {
     color: var(--accent-color);
 }
-
 .navbar nav {
     display: flex;
     align-items: center;
 }
-
 .navbar nav ul {
     list-style: none;
     display: flex;
     align-items: center; 
     gap: 10px; 
 }
-
 .navbar nav li {
     margin-left: 15px; 
 }
-
 .navbar nav a {
     text-decoration: none;
     color: var(--text-secondary);
     font-weight: 700;
     transition: color 0.3s ease;
 }
-
 .navbar nav a:hover {
     color: var(--accent-color);
 }
+.cta-button-nav {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-family: var(--font-heading);
+    font-size: 14px;
+}
+.cta-button-nav:hover {
+    background-color: var(--accent-color-hover);
+    color: #ffffff;
+}
 
-/* - HERO COM SLIDE- */
+/* Hero Slideshow */
 .hero {
     position: relative;
     color: #ffffff;
@@ -152,19 +161,18 @@ a {
     position: relative;
     z-index: 1;
 }
-
 .hero h1 {
     font-size: 48px;
     margin-bottom: 10px;
     color: #ffffff;
 }
-
 .hero p {
     font-size: 20px;
     font-weight: 300;
     margin-bottom: 30px;
 }
 
+/* Botão CTA Padrão */
 .cta-button {
     background-color: var(--accent-color);
     color: #ffffff;
@@ -177,7 +185,6 @@ a {
     border: none;
     cursor: pointer;
 }
-
 .cta-button:hover {
     background-color: var(--accent-color-hover);
     color: #ffffff;
@@ -185,7 +192,20 @@ a {
     transform: translateY(-2px);
 }
 
-/* Pilares da Saúde */
+/* Footer */
+.footer {
+    background-color: var(--text-headers);
+    color: #bdc3c7;
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-light);
+}
+.footer p {
+    font-size: 14px;
+}
+
+/* PÁGINA INICIAL*/
 .pilares-saude {
     padding: 60px 0;
     text-align: center;
@@ -215,7 +235,7 @@ a {
     opacity: 0.8;
 }
 
-/* -Artigos em Destaque  */
+/* Artigos Destaque */
 .artigos {
     padding-bottom: 60px;
 }
@@ -265,20 +285,7 @@ a {
     text-decoration: underline;
 }
 
-/* Rodapé */
-.footer {
-    background-color: var(--text-headers);
-    color: #bdc3c7;
-    text-align: center;
-    padding: 40px 20px;
-    margin-top: 40px;
-    border-top: 1px solid var(--border-light);
-}
-.footer p {
-    font-size: 14px;
-}
-
-/* -ARTIGO */
+/* ARTIGO*/
 .article-container {
     max-width: 800px;
     background-color: var(--bg-light-secondary);
@@ -389,15 +396,8 @@ a {
 .table-of-contents a:hover {
     text-decoration: underline;
 }
-@media (max-width: 768px) {
-    .table-of-contents {
-        float: none;
-        width: 100%;
-        margin-left: 0;
-    }
-}
 
-/* -FERRAMENTAS */
+/*FERRAMENTAS*/
 .page-header {
     text-align: center;
     padding: 40px 0;
@@ -451,7 +451,15 @@ a {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-/* -Caixa de Resultado */
+
+#calcular-btn {
+    display: block;
+    width: 100%; 
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Caixa de Resultado */
 .resultado-box {
     margin-top: 25px;
     padding: 20px;
@@ -483,7 +491,7 @@ a {
     color: var(--text-headers);
 }
 
-/* -QUIZ DE SAÚDE */
+/* Quiz de Saúde */
 #quiz-container {
     text-align: center;
 }
@@ -513,7 +521,7 @@ a {
 }
 #quiz-question-text {
     font-size: 22px;
-    margin-bottom: 25px;
+    margin-bottom: 25px;    
 }
 #quiz-result-content {
     text-align: left;
@@ -521,9 +529,16 @@ a {
 }
 #restart-quiz-btn {
     margin-top: 20px;
+    display: block;
+    width: 100%;
 }
 
-/* FÓRUM - */
+#start-quiz-btn {
+    display: block;
+    width: 100%;
+}
+
+/* FÓRUM */
 .forum-header {
     display: flex;
     justify-content: space-between;
@@ -599,20 +614,8 @@ a {
 .tag-nutricao { background-color: #2ecc71; }
 .tag-prevencao { background-color: #9b59b6; }
 .tag-geral { background-color: #777; }
-@media (max-width: 768px) {
-    .forum-header { flex-direction: column; align-items: flex-start; }
-    #new-topic-btn { margin-top: 20px; width: 100%; text-align: center; }
-    .forum-table th.col-category,
-    .forum-table td .tag-category,
-    .forum-table th.col-replies,
-    .forum-table td.col-replies,
-    .forum-table th.col-activity { display: none; }
-    .forum-table td { font-size: 16px; }
-    .topic-meta { font-size: 14px; }
-    .col-topic { width: 100%; }
-}
 
-/* -VER TÓPICO */
+/* Ver Tópico */
 .topic-breadcrumb {
     padding: 20px 0;
     margin-bottom: 0;
@@ -736,22 +739,8 @@ a {
 .reply-form button {
     float: right;
 }
-@media (max-width: 768px) {
-    .post-card { flex-direction: column; }
-    .post-author-info {
-        flex: 0 0 auto;
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        text-align: left;
-        gap: 15px;
-    }
-    .author-avatar { width: 50px; height: 50px; margin-bottom: 0; }
-}
 
-/* - NOVO TÓPICO*/
+/* 'NOVO TÓPICO'*/
 .form-container-card {
     background-color: var(--bg-light-secondary);
     border-radius: 8px;
@@ -821,7 +810,7 @@ a {
     margin-top: 0;
 }
 
-/* - SOBRE NÓS */
+/* SOBRE NÓS */
 .about-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -844,14 +833,6 @@ a {
     height: 1px;
     background-color: #eee;
     margin: 50px auto;
-}
-@media (max-width: 768px) {
-    .about-section {
-        grid-template-columns: 1fr;
-    }
-    .about-section:not(.about-philosophy) .about-image {
-        order: -1;
-    }
 }
 .quality-section {
     text-align: center;
@@ -898,7 +879,7 @@ a {
     line-height: 1.6;
 }
 
-/* - AUTENTICAÇÃO (Login/Register) */
+/* AUTENTICAÇÃO */
 .auth-container {
     padding-top: 40px;
     padding-bottom: 40px;
@@ -931,22 +912,6 @@ a {
     margin-bottom: 15px;
     margin-top: 0;
 }
-.cta-button-nav {
-    background-color: var(--accent-color);
-    color: #ffffff;
-    padding: 8px 16px;
-    text-decoration: none;
-    font-weight: 700;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    font-family: var(--font-heading);
-    font-size: 14px;
-}
-.cta-button-nav:hover {
-    background-color: var(--accent-color-hover);
-    color: #ffffff;
-}
-
 
 /* MENU MÓVEL */
 #mobile-menu-toggle {
@@ -966,6 +931,7 @@ a {
 }
 
 @media (max-width: 768px) {
+    /* MENU */
     .navbar nav ul {
         display: none; 
         flex-direction: column;
@@ -978,42 +944,32 @@ a {
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         z-index: 1000;
     }
-    
     .navbar nav ul.active {
         display: flex; 
     }
-
     .navbar nav li {
         margin: 0;
         width: 100%;
         text-align: center;
     }
-    
     .navbar nav li a {
         display: block;
         padding: 15px 0;
         border-bottom: 1px solid var(--border-light);
     }
-    
-   
     .navbar nav li .cta-button-nav {
         display: block;
         margin: 10px 20px;
         text-align: center;
     }
-    
-    
     .navbar nav li[style*="color: #1a253c"] {
         padding: 15px 0;
         font-size: 16px !important;
         border-bottom: 1px solid var(--border-light);
     }
-
     #mobile-menu-toggle {
         display: block; 
     }
-    
-    
     .navbar nav.active #mobile-menu-toggle .icon-bar:nth-child(1) {
         transform: rotate(45deg) translate(5px, 6px);
     }
@@ -1022,5 +978,43 @@ a {
     }
     .navbar nav.active #mobile-menu-toggle .icon-bar:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* RESPONSIVIDADE */
+    .table-of-contents {
+        float: none;
+        width: 100%;
+        margin-left: 0;
+    }
+    .post-card { flex-direction: column; }
+    .post-author-info {
+        flex: 0 0 auto;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        gap: 15px;
+    }
+    .author-avatar { width: 50px; height: 50px; margin-bottom: 0; }
+    .forum-header { flex-direction: column; align-items: flex-start; }
+    #new-topic-btn { margin-top: 20px; width: 100%; text-align: center; }
+    .forum-table th.col-category,
+    .forum-table td .tag-category,
+    .forum-table th.col-replies,
+    .forum-table td.col-replies,
+    .forum-table th.col-activity { display: none; }
+    .forum-table td { font-size: 16px; }
+    .topic-meta { font-size: 14px; }
+    .col-topic { width: 100%; }
+    
+    
+    .about-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-section:not(.about-philosophy) .about-image {
+        order: -1;
     }
 }
