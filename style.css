@@ -1018,3 +1018,18 @@ a {
         order: -1;
     }
 }
+
+
+.navbar nav ul li a.cta-button-nav {
+    color: #ffffff !important; /* Força o texto a ser BRANCO */
+    background-color: var(--accent-color);
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.navbar nav ul li a.cta-button-nav:hover {
+    background-color: var(--accent-color-hover);
+    color: #c9cad8 !important; 
+    transform: translateY(-2px); 
+}
