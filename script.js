@@ -1,33 +1,24 @@
-// --- BANCO DE DADOS SIMULADO (LOCALSTORAGE) ---
-const DB = {
-    // Ler dados
-    getUsers: () => JSON.parse(localStorage.getItem('mancare_users') || '[]'),
-    getTopics: () => JSON.parse(localStorage.getItem('mancare_topics') || '[]'),
-    getCurrentUser: () => JSON.parse(sessionStorage.getItem('mancare_current_user') || 'null'),
-
-    // Salvar dados
-    saveUser: (user) => {
-        const users = DB.getUsers();
-        users.push(user);
-        localStorage.setItem('mancare_users', JSON.stringify(users));
-    },
-    saveTopic: (topic) => {
-        const topics = DB.getTopics();
-        topics.push(topic);
-        localStorage.setItem('mancare_topics', JSON.stringify(topics));
-    },
-    updateTopics: (topics) => {
-        localStorage.setItem('mancare_topics', JSON.stringify(topics));
-    },
-    
-    // Sessão
-    loginUser: (user) => sessionStorage.setItem('mancare_current_user', JSON.stringify(user)),
-    logoutUser: () => sessionStorage.removeItem('mancare_current_user')
+// 1. CONFIGURAÇÃO DO FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyDS3tYU_swkQ5hxw30H4EKZsOwMmL19Q4s",
+    authDomain: "mancare-ceba8.firebaseapp.com",
+    projectId: "mancare-ceba8",
+    storageBucket: "mancare-ceba8.firebasestorage.app",
+    messagingSenderId: "910945656993",
+    appId: "1:910945656993:web:e4649a4510b33d18c650e0",
+    measurementId: "G-CXFGPJ8LZ3"
 };
+
+// Inicializa o Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Serviços
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // MENU MÓVEL
+    // --- MENU MÓVEL ---
     const menuToggle = document.getElementById('mobile-menu-toggle');
     const navbarMenu = document.getElementById('navbar-menu');
     const navbar = document.querySelector('.navbar nav');
@@ -39,51 +30,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // NAVBAR
+    // --- SISTEMA DE LOGIN / LOGOUT (Navbar Dinâmica) ---
     const navbarUl = document.getElementById('navbar-menu');
-    const currentUser = DB.getCurrentUser();
+    
+    // Ouve mudanças no estado da autenticação (Login/Logout) em tempo real
+    auth.onAuthStateChanged((user) => {
+        if (navbarUl) {
+            // Limpa botões antigos para não duplicar
+            const oldLogin = document.getElementById('login-link-nav');
+            const oldLogout = document.getElementById('logout-btn');
+            if (oldLogin && oldLogin.parentElement) oldLogin.parentElement.remove();
+            if (oldLogout && oldLogout.parentElement) oldLogout.parentElement.remove();
 
-    if (navbarUl) {
-        const oldLoginLinks = navbarUl.querySelectorAll('a[href="login.html"]');
-        oldLoginLinks.forEach(link => {
-            if (link.parentElement.tagName === 'LI') link.parentElement.remove();
-        });
-        
-        const oldLogout = document.getElementById('logout-btn');
-        if(oldLogout && oldLogout.parentElement) oldLogout.parentElement.remove();
+            if (user) {
+                // USUÁRIO LOGADO
+                const userLi = document.createElement('li');
+                // Tenta pegar o nome do email
+                const nomeDisplay = user.email.split('@')[0];
+                userLi.innerHTML = `<span style="font-weight:700; color:#1a253c; font-size:14px;">Olá, ${nomeDisplay}</span>`;
+                userLi.style.alignSelf = "center";
 
-        if (currentUser) {
-            const userLi = document.createElement('li');
-            const nomeUsuario = currentUser.email.split('@')[0];
-            userLi.innerHTML = `<span style="font-weight:700; color:#1a253c; font-size:14px;">Olá, ${nomeUsuario}</span>`;
-            userLi.style.alignSelf = "center";
-            
-            const logoutLi = document.createElement('li');
-            logoutLi.innerHTML = `<a href="#" id="logout-btn" class="cta-button-nav">Sair</a>`;
-            
-            navbarUl.appendChild(userLi);
-            navbarUl.appendChild(logoutLi);
+                const logoutLi = document.createElement('li');
+                logoutLi.innerHTML = `<a href="#" id="logout-btn" class="cta-button-nav">Sair</a>`;
 
-            document.getElementById('logout-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                if(confirm("Deseja realmente sair?")) {
-                    DB.logoutUser();
-                    window.location.href = 'index.html';
-                }
-            });
-        } else {
-            const loginLi = document.createElement('li');
-            loginLi.innerHTML = `<a href="login.html" id="login-link-nav" class="cta-button-nav">Login / Criar Conta</a>`;
-            navbarUl.appendChild(loginLi);
+                navbarUl.appendChild(userLi);
+                navbarUl.appendChild(logoutLi);
+
+                // Lógica do botão Sair
+                document.getElementById('logout-btn').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm("Deseja realmente sair?")) {
+                        auth.signOut().then(() => {
+                            window.location.href = 'index.html';
+                        });
+                    }
+                });
+            } else {
+                // USUÁRIO DESLOGADO
+                const loginLi = document.createElement('li');
+                loginLi.innerHTML = `<a href="login.html" id="login-link-nav" class="cta-button-nav">Login / Criar Conta</a>`;
+                navbarUl.appendChild(loginLi);
+            }
         }
-    }
+    });
 
-    //REGISTER
+    // --- PÁGINA DE CADASTRO (REGISTER) ---
     const registerForm = document.getElementById('register-form');
     const authErrorDiv = document.getElementById('auth-error');
 
     function showError(element, msg) {
-        if(element) {
+        if (element) {
             element.innerText = msg;
             element.style.display = 'block';
         } else {
@@ -97,26 +93,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
 
-            if (password.length < 6) {
-                showError(authErrorDiv, "A senha deve ter no mínimo 6 caracteres.");
-                return;
-            }
-
-            const users = DB.getUsers();
-            if (users.find(u => u.email === email)) {
-                showError(authErrorDiv, "Este email já está cadastrado.");
-                return;
-            }
-
-            const newUser = { id: 'usr_' + Date.now(), email, password };
-            DB.saveUser(newUser);
-            DB.loginUser(newUser);
-            alert("Conta criada com sucesso!");
-            window.location.href = 'forum.html';
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    alert("Conta criada com sucesso! A redirecionar...");
+                    window.location.href = 'forum.html';
+                })
+                .catch((error) => {
+                    let msg = "Erro ao criar conta.";
+                    if (error.code === 'auth/weak-password') msg = "A senha deve ter pelo menos 6 caracteres.";
+                    if (error.code === 'auth/email-already-in-use') msg = "Este email já está em uso.";
+                    showError(authErrorDiv, msg);
+                });
         });
     }
 
-    //LOGIN
+    // --- PÁGINA DE LOGIN ---
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -124,138 +115,176 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
-            const user = DB.getUsers().find(u => u.email === email && u.password === password);
-
-            if (user) {
-                DB.loginUser(user);
-                window.location.href = 'forum.html';
-            } else {
-                showError(authErrorDiv, "Email ou senha incorretos.");
-            }
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    window.location.href = 'forum.html';
+                })
+                .catch((error) => {
+                    let msg = "Erro ao entrar.";
+                    if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                        msg = "Email ou senha incorretos.";
+                    }
+                    showError(authErrorDiv, msg);
+                });
         });
     }
 
-    // FÓRUM - LISTAR TÓPICOS
+    // --- FÓRUM: LISTAR TÓPICOS (forum.html) ---
     const topicListContainer = document.getElementById('forum-topic-list');
     if (topicListContainer) {
-        const topics = DB.getTopics();
-        topicListContainer.innerHTML = "";
+        // Busca tópicos do Firestore ordenados por data
+        db.collection("topicos").orderBy("dataCriacao", "desc").get()
+            .then((querySnapshot) => {
+                topicListContainer.innerHTML = ""; // Limpa "A carregar..."
 
-        if (topics.length === 0) {
-            topicListContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Nenhum tópico encontrado. Seja o primeiro a postar!</td></tr>';
-        } else {
-            topics.sort((a, b) => new Date(b.data) - new Date(a.data));
+                if (querySnapshot.empty) {
+                    topicListContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">Nenhum tópico encontrado. Seja o primeiro!</td></tr>';
+                    return;
+                }
 
-            topics.forEach(topic => {
-                const date = new Date(topic.data).toLocaleDateString('pt-BR');
-                const respostasCount = topic.respostas ? topic.respostas.length : 0;
-                
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>
-                        <a href="ver-topico.html?id=${topic.id}" class="topic-title">${topic.titulo}</a>
-                        <div class="topic-meta">por <span class="author-name">${topic.autorEmail}</span> | ${date}</div>
-                    </td>
-                    <td><span class="tag-category tag-${topic.categoria}">${topic.categoria}</span></td>
-                    <td>${respostasCount}</td>
-                    <td>${date}</td>
-                `;
-                topicListContainer.appendChild(tr);
+                querySnapshot.forEach((doc) => {
+                    const topico = doc.data();
+                    const id = doc.id;
+                    const date = topico.dataCriacao ? topico.dataCriacao.toDate().toLocaleDateString('pt-BR') : 'Data desc.';
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <a href="ver-topico.html?id=${id}" class="topic-title">${topico.titulo}</a>
+                            <div class="topic-meta">por <span class="author-name">${topico.autorEmail}</span> | ${date}</div>
+                        </td>
+                        <td><span class="tag-category tag-${topico.categoria}">${topico.categoria}</span></td>
+                        <td>-</td> 
+                        <td>${date}</td>
+                    `;
+                    topicListContainer.appendChild(tr);
+                });
+            })
+            .catch((error) => {
+                console.error("Erro ao buscar tópicos: ", error);
+                topicListContainer.innerHTML = '<tr><td colspan="4">Erro ao carregar dados.</td></tr>';
             });
-        }
     }
 
-    // FÓRUM: CRIAR TÓPICO
+    // --- FÓRUM: CRIAR TÓPICO (novo-topico.html) ---
     const topicForm = document.querySelector('.topic-form');
+    // Garante que é o form de tópico
     if (topicForm && !loginForm && !registerForm) {
         topicForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (!currentUser) {
-                alert("Você precisa estar logado para publicar.");
+            const user = auth.currentUser;
+
+            if (!user) {
+                alert("Você precisa estar logado.");
                 window.location.href = 'login.html';
                 return;
             }
 
-            const newTopic = {
-                id: 'topic_' + Date.now(),
-                titulo: document.getElementById('topic-title').value,
-                categoria: document.getElementById('topic-category').value,
-                mensagem: document.getElementById('topic-message').value,
-                autorEmail: currentUser.email,
-                data: new Date().toISOString(),
-                respostas: []
-            };
+            const title = document.getElementById('topic-title').value;
+            const category = document.getElementById('topic-category').value;
+            const message = document.getElementById('topic-message').value;
 
-            DB.saveTopic(newTopic);
-            alert("Tópico publicado com sucesso!");
-            window.location.href = `ver-topico.html?id=${newTopic.id}`;
+            // Salva no Firestore
+            db.collection("topicos").add({
+                titulo: title,
+                categoria: category,
+                mensagem: message,
+                autorId: user.uid,
+                autorEmail: user.email,
+                dataCriacao: firebase.firestore.FieldValue.serverTimestamp() // Data do servidor
+            })
+            .then((docRef) => {
+                alert("Tópico publicado!");
+                window.location.href = `ver-topico.html?id=${docRef.id}`;
+            })
+            .catch((error) => {
+                console.error("Erro: ", error);
+                alert("Erro ao publicar.");
+            });
         });
     }
 
-    // FÓRUM: VER TÓPICO E RESPONDER
+    // --- FÓRUM: VER TÓPICO E RESPONDER (ver-topico.html) ---
     const topicHeader = document.getElementById('topic-header-dynamic');
     if (topicHeader) {
         const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-        const topics = DB.getTopics();
-        const topic = topics.find(t => t.id === id);
+        const topicId = params.get('id');
+        const repliesContainer = document.getElementById('replies-container');
 
-        if (topic) {
-            const date = new Date(topic.data).toLocaleDateString('pt-BR');
-            topicHeader.innerHTML = `
-                <h1>${topic.titulo}</h1>
-                <div class="topic-details">
-                    <span class="tag-category tag-${topic.categoria}">${topic.categoria}</span>
-                    <span>Postado por <span class="author-name">${topic.autorEmail}</span> | ${date}</span>
-                </div>
-            `;
-            
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(topic.autorEmail)}&background=random&color=fff`;
-            document.getElementById('original-post-dynamic').innerHTML = `
-                <aside class="post-author-info">
-                    <img src="${avatarUrl}" alt="Avatar" class="author-avatar">
-                    <span class="author-name">${topic.autorEmail}</span>
-                    <span class="author-role">Autor</span>
-                </aside>
-                <div class="post-content">
-                    <p class="post-meta">Postado em ${new Date(topic.data).toLocaleString()}</p>
-                    <div class="post-body"><p>${topic.mensagem.replace(/\n/g, '<br>')}</p></div>
-                </div>
-            `;
+        if (topicId) {
+            // 1. Carrega Tópico
+            db.collection("topicos").doc(topicId).get().then((doc) => {
+                if (doc.exists) {
+                    const topico = doc.data();
+                    const date = topico.dataCriacao ? topico.dataCriacao.toDate().toLocaleDateString('pt-BR') : '';
+                    
+                    // Cabeçalho
+                    topicHeader.innerHTML = `
+                        <h1>${topico.titulo}</h1>
+                        <div class="topic-details">
+                            <span class="tag-category tag-${topico.categoria}">${topico.categoria}</span>
+                            <span>Postado por <span class="author-name">${topico.autorEmail}</span> | ${date}</span>
+                        </div>
+                    `;
 
-            const renderReplies = () => {
-                const container = document.getElementById('replies-container');
-                container.innerHTML = "";
-                const count = topic.respostas ? topic.respostas.length : 0;
-                document.getElementById('replies-header').innerText = `${count} Respostas`;
+                    // Post Original
+                    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(topico.autorEmail)}&background=random&color=fff`;
+                    document.getElementById('original-post-dynamic').innerHTML = `
+                        <aside class="post-author-info">
+                            <img src="${avatarUrl}" alt="Avatar" class="author-avatar">
+                            <span class="author-name">${topico.autorEmail}</span>
+                            <span class="author-role">Autor</span>
+                        </aside>
+                        <div class="post-content">
+                            <p class="post-meta">Publicado em ${date}</p>
+                            <div class="post-body"><p>${topico.mensagem.replace(/\n/g, '<br>')}</p></div>
+                        </div>
+                    `;
+                } else {
+                    topicHeader.innerHTML = "<h1>Tópico não encontrado.</h1>";
+                }
+            });
 
-                if(topic.respostas) {
-                    topic.respostas.forEach(resp => {
-                        const avt = `https://ui-avatars.com/api/?name=${encodeURIComponent(resp.autorEmail)}&background=random&color=fff`;
-                        const card = document.createElement('article');
-                        card.className = 'post-card';
-                        card.innerHTML = `
+            // 2. Carrega Respostas (Subcoleção)
+            const carregarRespostas = () => {
+                db.collection("topicos").doc(topicId).collection("respostas")
+                  .orderBy("dataCriacao", "asc")
+                  .get()
+                  .then((snapshot) => {
+                      repliesContainer.innerHTML = "";
+                      document.getElementById('replies-header').innerText = `${snapshot.size} Respostas`;
+
+                      snapshot.forEach(doc => {
+                          const resp = doc.data();
+                          const date = resp.dataCriacao ? resp.dataCriacao.toDate().toLocaleString() : '';
+                          const avt = `https://ui-avatars.com/api/?name=${encodeURIComponent(resp.autorEmail)}&background=random&color=fff`;
+
+                          const card = document.createElement('article');
+                          card.className = 'post-card';
+                          card.innerHTML = `
                             <aside class="post-author-info">
                                 <img src="${avt}" alt="Avatar" class="author-avatar">
                                 <span class="author-name">${resp.autorEmail}</span>
                                 <span class="author-role">Membro</span>
                             </aside>
                             <div class="post-content">
-                                <p class="post-meta">Postado em ${new Date(resp.data).toLocaleString()}</p>
+                                <p class="post-meta">Respondido em ${date}</p>
                                 <div class="post-body"><p>${resp.mensagem.replace(/\n/g, '<br>')}</p></div>
                             </div>
-                        `;
-                        container.appendChild(card);
-                    });
-                }
+                          `;
+                          repliesContainer.appendChild(card);
+                      });
+                  });
             };
-            renderReplies();
+            carregarRespostas();
 
+            // 3. Enviar Nova Resposta
             const replyForm = document.getElementById('reply-form');
-            if(replyForm) {
+            if (replyForm) {
                 replyForm.addEventListener('submit', (e) => {
                     e.preventDefault();
-                    if (!currentUser) {
+                    const user = auth.currentUser;
+                    if (!user) {
                         alert("Faça login para responder.");
                         window.location.href = 'login.html';
                         return;
@@ -263,29 +292,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const msg = document.getElementById('reply-message').value;
                     if(!msg) return;
 
-                    const newReply = {
+                    db.collection("topicos").doc(topicId).collection("respostas").add({
                         mensagem: msg,
-                        autorEmail: currentUser.email,
-                        data: new Date().toISOString()
-                    };
-
-                    if(!topic.respostas) topic.respostas = [];
-                    topic.respostas.push(newReply);
-
-                    const topicIndex = topics.findIndex(t => t.id === id);
-                    topics[topicIndex] = topic;
-                    DB.updateTopics(topics);
-
-                    document.getElementById('reply-message').value = '';
-                    renderReplies();
+                        autorId: user.uid,
+                        autorEmail: user.email,
+                        dataCriacao: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                    .then(() => {
+                        document.getElementById('reply-message').value = '';
+                        carregarRespostas();
+                    })
+                    .catch(err => console.error(err));
                 });
             }
-        } else {
-            topicHeader.innerHTML = "<h1>Tópico não encontrado.</h1>";
+
         }
     }
 
-    // CALCULADORA IMC
+    // --- FERRAMENTAS: CALCULADORA IMC ---
     const calcularBtn = document.getElementById('calcular-btn');
     if (calcularBtn) {
         calcularBtn.addEventListener('click', () => {
@@ -306,137 +330,68 @@ document.addEventListener('DOMContentLoaded', () => {
              }
         });
     }
-    
-    // QUIZ DE SAÚDE
+
+    // --- FERRAMENTAS: QUIZ ---
     const startQuizBtn = document.getElementById('start-quiz-btn');
-    const restartQuizBtn = document.getElementById('restart-quiz-btn');
-    const quizIntro = document.getElementById('quiz-intro');
     const quizMain = document.getElementById('quiz-main');
+    const quizIntro = document.getElementById('quiz-intro');
     const quizResult = document.getElementById('quiz-result');
     const quizQuestionText = document.getElementById('quiz-question-text');
     const quizAnswerButtons = document.getElementById('quiz-answer-buttons');
     const quizResultContent = document.getElementById('quiz-result-content');
-
-    // PERGUNTAS DO QUIZ
+    
+    // (A mesma lógica de perguntas e pontuação do script anterior pode ser mantida aqui)
+    // Vou incluir a versão completa para garantir que o quiz funcione.
     const quizPerguntas = [
-        {
-            pergunta: "Quantas noites por semana você dorme 7-8 horas?",
-            respostas: [
-                { texto: "Quase todas (5-7)", pontos: 3 },
-                { texto: "Algumas (3-4)", pontos: 2 },
-                { texto: "Raramente (0-2)", pontos: 1 }
-            ]
-        },
-        {
-            pergunta: "Com que frequência você pratica exercícios (mín. 30 min)?",
-            respostas: [
-                { texto: "4+ vezes por semana", pontos: 3 },
-                { texto: "1-3 vezes por semana", pontos: 2 },
-                { texto: "Quase nunca", pontos: 1 }
-            ]
-        },
-        {
-            pergunta: "Como é sua alimentação diária?",
-            respostas: [
-                { texto: "Equilibrada (frutas, vegetais, proteínas)", pontos: 3 },
-                { texto: "Razoável (às vezes como bem, às vezes não)", pontos: 2 },
-                { texto: "Muitos processados, fast-food e açúcar", pontos: 1 }
-            ]
-        },
-        {
-            pergunta: "Como você lida com o estresse?",
-            respostas: [
-                { texto: "Tenho hobbies e consigo relaxar", pontos: 3 },
-                { texto: "Fico estressado, mas aguento", pontos: 2 },
-                { texto: "Me sinto sobrecarregado e ansioso", pontos: 1 }
-            ]
-        },
-        {
-            pergunta: "Você se sente conectado com amigos ou família?",
-            respostas: [
-                { texto: "Sim, converso e me encontro regularmente", pontos: 3 },
-                { texto: "Mais ou menos, falo pouco com as pessoas", pontos: 2 },
-                { texto: "Me sinto bastante isolado", pontos: 1 }
-            ]
-        }
+        { pergunta: "Quantas noites por semana você dorme 7-8 horas?", respostas: [{ texto: "Quase todas (5-7)", pontos: 3 }, { texto: "Algumas (3-4)", pontos: 2 }, { texto: "Raramente (0-2)", pontos: 1 }] },
+        { pergunta: "Com que frequência você pratica exercícios (mín. 30 min)?", respostas: [{ texto: "4+ vezes por semana", pontos: 3 }, { texto: "1-3 vezes por semana", pontos: 2 }, { texto: "Quase nunca", pontos: 1 }] },
+        { pergunta: "Como é sua alimentação diária?", respostas: [{ texto: "Equilibrada", pontos: 3 }, { texto: "Razoável", pontos: 2 }, { texto: "Muitos processados", pontos: 1 }] },
+        { pergunta: "Como você lida com o estresse?", respostas: [{ texto: "Tenho hobbies", pontos: 3 }, { texto: "Aguento", pontos: 2 }, { texto: "Sobrecarregado", pontos: 1 }] },
+        { pergunta: "Conexão social?", respostas: [{ texto: "Boa", pontos: 3 }, { texto: "Média", pontos: 2 }, { texto: "Isolado", pontos: 1 }] }
     ];
-
-    let perguntaAtualIndex = 0;
-    let pontuacaoTotal = 0;
+    let pIndex = 0; let pTotal = 0;
 
     function iniciarQuiz() {
-        perguntaAtualIndex = 0;
-        pontuacaoTotal = 0;
-        
+        pIndex = 0; pTotal = 0;
         if(quizIntro) quizIntro.style.display = 'none';
         if(quizResult) quizResult.style.display = 'none';
         if(quizMain) quizMain.style.display = 'block';
-        
-        mostrarPergunta();
+        mostrarP();
     }
-
-    function mostrarPergunta() {
-        if(quizAnswerButtons) quizAnswerButtons.innerHTML = ''; 
-        
-        let pergunta = quizPerguntas[perguntaAtualIndex];
-        if(quizQuestionText) quizQuestionText.innerText = pergunta.pergunta;
-
-        pergunta.respostas.forEach(resposta => {
-            const button = document.createElement('button');
-            button.innerText = resposta.texto;
-            button.addEventListener('click', () => selecionarResposta(resposta.pontos));
-            if(quizAnswerButtons) quizAnswerButtons.appendChild(button);
+    function mostrarP() {
+        if(quizAnswerButtons) quizAnswerButtons.innerHTML = '';
+        if(quizQuestionText) quizQuestionText.innerText = quizPerguntas[pIndex].pergunta;
+        quizPerguntas[pIndex].respostas.forEach(r => {
+            const btn = document.createElement('button');
+            btn.innerText = r.texto;
+            btn.addEventListener('click', () => {
+                pTotal += r.pontos;
+                pIndex++;
+                if(pIndex < quizPerguntas.length) mostrarP(); else mostrarRes();
+            });
+            if(quizAnswerButtons) quizAnswerButtons.appendChild(btn);
         });
     }
-
-    function selecionarResposta(pontos) {
-        pontuacaoTotal += pontos;
-        perguntaAtualIndex++;
-
-        if (perguntaAtualIndex < quizPerguntas.length) {
-            mostrarPergunta();
-        } else {
-            mostrarResultado();
-        }
-    }
-
-    function mostrarResultado() {
+    function mostrarRes() {
         if(quizMain) quizMain.style.display = 'none';
         if(quizResult) quizResult.style.display = 'block';
-
-        let mensagem = '';
-        let classeCss = '';
-
-        if (pontuacaoTotal >= 12) {
-            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Ótimo!)</strong><br>
-                        Você está no caminho certo! Seus hábitos de sono, dieta e exercícios parecem sólidos.`;
-            classeCss = 'success';
-        } else if (pontuacaoTotal >= 8) {
-            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Bom, mas atenção)</strong><br>
-                        Você tem uma base boa, mas alguns pontos precisam de ajuste. Confira nossos guias em 'Nutrição'.`;
-            classeCss = 'warning';
-        } else {
-            mensagem = `<strong>Pontuação: ${pontuacaoTotal} (Hora de Mudar)</strong><br>
-                        Parece que você está sobrecarregado. Não se preocupe, comece pelo nosso pilar de 'Saúde Mental'.`;
-            classeCss = 'danger';
-        }
-
+        let msg = '', cls = '';
+        if(pTotal >= 12) { msg = "Ótimo! Continue assim."; cls = 'success'; }
+        else if(pTotal >= 8) { msg = "Bom, mas atenção a alguns pontos."; cls = 'warning'; }
+        else { msg = "Hora de mudar. Cuide da sua saúde."; cls = 'danger'; }
+        
         if(quizResultContent) {
-            quizResultContent.innerHTML = mensagem;
-            quizResultContent.className = 'resultado-box';
-            quizResultContent.classList.add(classeCss);
+            quizResultContent.innerHTML = `<strong>Pontuação: ${pTotal}</strong><br>${msg}`;
+            quizResultContent.className = 'resultado-box ' + cls;
             quizResultContent.style.display = 'block';
         }
     }
+    
+    if(startQuizBtn) startQuizBtn.addEventListener('click', iniciarQuiz);
+    if(document.getElementById('restart-quiz-btn')) document.getElementById('restart-quiz-btn').addEventListener('click', iniciarQuiz);
 
-    if (startQuizBtn) {
-        startQuizBtn.addEventListener('click', iniciarQuiz);
-    }
-    if (restartQuizBtn) {
-        restartQuizBtn.addEventListener('click', iniciarQuiz);
-    }
 
-    // SLIDESHOW
+    // --- SLIDESHOW ---
     const slides = document.querySelectorAll('.hero-slideshow .slide');
     if (slides.length > 0) {
         let currentSlide = 0;
@@ -446,5 +401,4 @@ document.addEventListener('DOMContentLoaded', () => {
             slides[currentSlide].classList.add('active');
         }, 5000);
     }
-
 });
